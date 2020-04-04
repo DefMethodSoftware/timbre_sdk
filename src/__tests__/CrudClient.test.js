@@ -42,8 +42,8 @@ describe('Crud Client', ()=>{
             }
           ]
         })
-
-      const resp = await client.get({url: 'endpoint' })
+      
+      await client.get({url: 'endpoint' })
 
       expect(scope.isDone()).toBe(true)
     })
@@ -60,7 +60,7 @@ describe('Crud Client', ()=>{
             }
           ]
         })
-      const resp = await client.post({ url: 'endpoint', body: {}})
+      await client.post({ url: 'endpoint', body: {}})
 
       expect(scope.isDone()).toBe(true)
     })
@@ -78,7 +78,7 @@ describe('Crud Client', ()=>{
           ]
         })
 
-      const resp = await client.patch({ url: 'endpoint', body: {}})
+      await client.patch({ url: 'endpoint', body: {}})
 
       expect(scope.isDone()).toBe(true)
     })

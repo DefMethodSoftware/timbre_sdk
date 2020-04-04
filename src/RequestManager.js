@@ -75,8 +75,9 @@ export default class RequestManager extends ErrorHandler {
     })
   }
 
-  isStorageableEndpoint = (url) => {
-    return false
+  isStorageableEndpoint = (url, method) =>{
+    url = url.replace(this.apiURI + "/", "")
+    return this.isWhitelistedAction(url, method)
   }
 
   performRequest = async (requestConf) => {
@@ -85,8 +86,8 @@ export default class RequestManager extends ErrorHandler {
 
   performSuccess = response => {
     const { status, statusText, config, data } = response;
-    if (this.isStorageableEndpoint(config.url)) {
-      this.storeAccessData(this.storage, this.storageID, data.access);
+    if (this.isStorageableEndpoint(config.url, config.method)) {
+      this.storeAccessData(this.storage, this.storageID, data.token);
     }
     return ({ result: { status, statusText, request: config, data }})
   }
@@ -94,9 +95,12 @@ export default class RequestManager extends ErrorHandler {
   requestor = async (config, retries = 1) => { 
     this._verifyConfig(config, REQUIRED_REQUEST_KEYS)
     const requestConf = await this.generateRequestConfig({ ...config, apiURI: this.apiURI })
-    console.warn(requestConf)
     const response = await this.performRequest(requestConf)
 
     return response
+  }
+
+  storeAccessData = (storage, storageId, token) => {
+    storage.setItem(storageId, token)
   }
 }

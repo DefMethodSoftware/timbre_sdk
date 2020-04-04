@@ -82,5 +82,24 @@ describe('Crud Client', ()=>{
 
       expect(scope.isDone()).toBe(true)
     })
+
+    it('should return failed requests', async ()=>{
+      scope.get('/endpoint')
+        .reply((uri, requestBody)=>{
+          return [
+            400,
+            {
+              statusText: "statusText",
+              config: "config",
+              data: "data"
+            }
+          ]
+        })
+      
+      const resp = await client.get({url: 'endpoint' })
+
+      expect(resp.result.status).toBe(400)
+      expect(scope.isDone()).toBe(true)
+    })
   })
 })

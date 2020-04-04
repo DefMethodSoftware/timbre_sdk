@@ -41,7 +41,6 @@ describe('Authentication Client', ()=>{
       const body = {
         email: 'user@test.com',
         password: 'password',
-        username: 'testuser'
       }
 
       scope.post('/users/login')
@@ -66,7 +65,6 @@ describe('Authentication Client', ()=>{
       const body = {
         email: 'user@test.com',
         password: 'password',
-        username: 'testuser'
       }
 
       scope.post('/users/login')

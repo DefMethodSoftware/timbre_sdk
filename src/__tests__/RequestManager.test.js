@@ -9,7 +9,8 @@ describe('Request Manager', ()=>{
   let storage, apiURI, rm, storageId;
   beforeEach(()=>{
     storage = {
-        getItem: jest.fn()
+        getItem: jest.fn(),
+        setItem: jest.fn()
     }
     storageId = 'storageId'
     rm = new RequestManager({
@@ -37,7 +38,7 @@ describe('Request Manager', ()=>{
         const response = Promise.resolve({
           status: 'status',
           statusText: 'statusText',
-          config: {},
+          config: callConfig,
           data: {}
         })
         return response
@@ -62,7 +63,7 @@ describe('Request Manager', ()=>{
         const response = Promise.resolve({
           status: 'status',
           statusText: 'statusText',
-          config: {},
+          config: callConfig,
           data: {}
         })
         return response

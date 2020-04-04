@@ -3,6 +3,7 @@ import axios from 'axios'
 
 jest.mock('axios')
 
+const API_URI = process.env.API_URI
 
 describe('Request Manager', ()=>{
   let storage, apiURI, rm, storageId;
@@ -12,14 +13,14 @@ describe('Request Manager', ()=>{
     }
     storageId = 'storageId'
     rm = new RequestManager({
-      apiURI: 'https://api.test.com',
+      apiURI: API_URI,
       storage: storage,
       storageId: storageId
     })
   })
 
   it('is constructed with an apURI, storage and storageId', ()=>{
-    expect(rm.apiURI).toBe('https://api.test.com')
+    expect(rm.apiURI).toBe(API_URI)
     expect(rm.storage).toBe(storage)
     expect(rm.storageId).toBe('storageId')
   })
@@ -44,7 +45,7 @@ describe('Request Manager', ()=>{
       
       await rm.requestor(config)
 
-      expect(request.url).toBe('https://api.test.com/endpoint')
+      expect(request.url).toBe(API_URI + "/endpoint")
       expect(request.method).toBe('get')
       expect(request.headers.Authorization).toBe('token')
       expect(request.headers['Content-Type']).toBe('application/json')
@@ -69,7 +70,7 @@ describe('Request Manager', ()=>{
       
       await rm.requestor(config)
 
-      expect(request.url).toBe('https://api.test.com/users')
+      expect(request.url).toBe(API_URI + "/users")
       expect(request.method).toBe('post')
       expect(request.headers.Authorization).toBe(null)
       expect(request.headers['Content-Type']).toBe('application/json')
@@ -129,7 +130,7 @@ describe('Request Manager', ()=>{
       
       await rm.requestor(config)
       
-      expect(request.url).toBe('https://api.test.com/endpoint')
+      expect(request.url).toBe(API_URI + "/endpoint")
       expect(request.method).toBe('get')
       expect(request.headers.Authorization).toBe('stored token')
       expect(request.headers['Content-Type']).toBe('application/json')
@@ -172,7 +173,7 @@ describe('Request Manager', ()=>{
 
     it('should throw if required params are not provided', async ()=>{
       expect(()=>{new RequestManager({
-        apiURI: 'https://api.test.com',
+        apiURI: API_URI,
         storage: null,
         storageId: storageId
       })}).toThrow('Invalid config: storage missing or invalid')
@@ -180,7 +181,7 @@ describe('Request Manager', ()=>{
     
     it('should throw if required params are not provided', async ()=>{
       expect(()=>{new RequestManager({
-        apiURI: 'https://api.test.com',
+        apiURI: API_URI,
         storage: storage,
         storageId: null
       })}).toThrow('Invalid config: storageId missing or invalid')

@@ -22,16 +22,16 @@ const WHITELISTED_ENDPOINTS = [
 ]
 
 export default class RequestManager extends ErrorHandler {
-  constructor ({ apiURI, storage, storageId, ...config}) {
+  constructor ({ apiURI, ...config}) {
     super()
     this._verifyConfig(arguments[0], REQUIRED_BUILD_KEYS)
 
     // root URL
     this.apiURI = apiURI
     // platform object for getting / setting stored keys
-    this.storage = storage
+    this.storage = config.storage
     // the object key used to access the stored token
-    this.storageId = storageId
+    this.storageId = config.storageId
   }
 
   _verifyConfig = (config, keys) => {
@@ -55,7 +55,7 @@ export default class RequestManager extends ErrorHandler {
         withCredentials: false,
         crossDomain: true,
         timeout: 1000,
-        responseType: responseType !== null ? responseType : 'json',
+        responseType: notEmpty(responseType) ? 'json' : responseType,
         data: method !== 'get' && notEmpty(body) ? JSON.stringify(body) : {}
       }
   };
@@ -64,7 +64,7 @@ export default class RequestManager extends ErrorHandler {
     if (this.isWhitelistedAction(url, method)) {
       return null
     }
-    return token !== null ?
+    return notEmpty(token) ?
     token :
     await this.storage.getItem(this.storageId)
   }
@@ -94,6 +94,7 @@ export default class RequestManager extends ErrorHandler {
   requestor = async (config, retries = 1) => { 
     this._verifyConfig(config, REQUIRED_REQUEST_KEYS)
     const requestConf = await this.generateRequestConfig({ ...config, apiURI: this.apiURI })
+    console.warn(requestConf)
     const response = await this.performRequest(requestConf)
 
     return response

@@ -87,7 +87,7 @@ export default class RequestManager extends ErrorHandler {
   performSuccess = response => {
     const { status, statusText, config, data } = response;
     if (this.isStorageableEndpoint(config.url, config.method)) {
-      this.storeAccessData(this.storage, this.storageID, data.token);
+      this.storeAccessData(this.storage, this.storageId, data.token);
     }
     return ({ result: { status, statusText, request: config, data }})
   }

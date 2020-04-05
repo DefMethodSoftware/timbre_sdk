@@ -6,7 +6,6 @@ export default class CrudClient extends RequestManager {
   }
 
   get = async ({ url, token, ...reqConfig }) => {
-    console.log(token, "GET TOKEN")
     return await this.requestor({
       url: url, token: token, method: 'GET',
       headers: reqConfig.headers, responseType: reqConfig.responseType

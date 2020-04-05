@@ -4,7 +4,7 @@ import axios from 'axios'
 import httpAdapter from 'axios/lib/adapters/http'
 import nock from 'nock'
 
-const API_URI = process.env.API_URI
+const API_URL = process.env.API_URL
 
 axios.defaults.adapter = httpAdapter;
 
@@ -18,10 +18,10 @@ describe('Users Client', ()=>{
         setItem: jest.fn()
     }
 
-    scope = nock(API_URI, { allowUnmocked: false })
+    scope = nock(API_URL, { allowUnmocked: false })
 
     client = new UsersClient({
-      apiURI: API_URI,
+      apiURI: API_URL,
       storage: storage,
       storageId: 'storageId'
     })
@@ -29,7 +29,7 @@ describe('Users Client', ()=>{
 
   it('should inherit from Crud Client', ()=>{
     const client = new UsersClient({
-      apiURI: API_URI,
+      apiURI: API_URL,
       storage: {
         getItem: jest.fn().mockImplementation(()=>{
           return 'token'

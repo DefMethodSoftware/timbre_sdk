@@ -4,7 +4,7 @@ import axios from 'axios'
 import httpAdapter from 'axios/lib/adapters/http'
 import nock from 'nock'
 
-const API_URI = process.env.API_URI
+const API_URL = process.env.API_URL
 
 axios.defaults.adapter = httpAdapter;
 
@@ -18,11 +18,11 @@ describe('Crud Client', ()=>{
           })
       }
 
-      scope = nock(API_URI, { allowUnmocked: false })
+      scope = nock(API_URL, { allowUnmocked: false })
 
       storageId = 'storageId'
       client = new CrudClient({
-        apiURI: API_URI,
+        apiURI: API_URL,
         storage: storage,
         storageId: storageId
       })

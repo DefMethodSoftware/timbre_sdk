@@ -1,12 +1,12 @@
 import axios from 'axios'
 import ErrorHandler from './ErrorHandler'
 import {
+  isEmpty,
   notEmpty,
   identity
 } from './utils'
 
 const REQUIRED_BUILD_KEYS = [
-  'apiURI',
   'storage',
   'storageId'
 ]
@@ -22,9 +22,9 @@ const WHITELISTED_ENDPOINTS = [
 ]
 
 export default class RequestManager extends ErrorHandler {
-  constructor ({ apiURI, ...config}) {
+  constructor ({ apiURI, config}) {
     super()
-    this._verifyConfig(arguments[0], REQUIRED_BUILD_KEYS)
+    this._verifyConfig(config, REQUIRED_BUILD_KEYS)
 
     // root URL
     this.apiURI = apiURI
@@ -55,7 +55,7 @@ export default class RequestManager extends ErrorHandler {
         withCredentials: false,
         crossDomain: true,
         timeout: 1000,
-        responseType: notEmpty(responseType) ? 'json' : responseType,
+        responseType: isEmpty(responseType) ? 'json' : responseType,
         data: method !== 'get' && notEmpty(body) ? JSON.stringify(body) : {}
       }
   };

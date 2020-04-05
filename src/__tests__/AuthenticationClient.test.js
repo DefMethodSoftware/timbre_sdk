@@ -4,14 +4,14 @@ import axios from 'axios'
 import httpAdapter from 'axios/lib/adapters/http'
 import nock from 'nock'
 
-const API_URI = process.env.API_URI
+const API_URL = process.env.API_URL
 
 axios.defaults.adapter = httpAdapter;
 
 describe('Authentication Client', ()=>{
   it('should inherit from Crud Client', ()=>{
     const client = new AuthenticationClient({
-      apiURI: API_URI,
+      apiURI: API_URL,
       storage: jest.fn(),
       storageId: 'storageId'
     })
@@ -28,10 +28,10 @@ describe('Authentication Client', ()=>{
           setItem: jest.fn()
       }
 
-      scope = nock(API_URI, { allowUnmocked: false })
+      scope = nock(API_URL, { allowUnmocked: false })
 
       client = new AuthenticationClient({
-        apiURI: API_URI,
+        apiURI: API_URL,
         storage: storage,
         storageId: 'storageId'
       })

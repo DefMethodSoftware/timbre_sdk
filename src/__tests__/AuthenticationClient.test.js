@@ -12,8 +12,10 @@ describe('Authentication Client', ()=>{
   it('should inherit from Crud Client', ()=>{
     const client = new AuthenticationClient({
       apiURI: API_URL,
-      storage: jest.fn(),
-      storageId: 'storageId'
+      config: {
+        storage: jest.fn(),
+        storageId: 'storageId'
+      }
     })
     expect(client).toBeInstanceOf(CrudClient)
   })
@@ -29,11 +31,14 @@ describe('Authentication Client', ()=>{
       }
 
       scope = nock(API_URL, { allowUnmocked: false })
-
+      storageId = 'storageId'
+      
       client = new AuthenticationClient({
         apiURI: API_URL,
-        storage: storage,
-        storageId: 'storageId'
+        config: {
+          storage: storage,
+          storageId: storageId
+        }
       })
     })
 

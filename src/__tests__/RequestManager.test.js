@@ -15,8 +15,10 @@ describe('Request Manager', ()=>{
     storageId = 'storageId'
     rm = new RequestManager({
       apiURI: API_URL,
-      storage: storage,
-      storageId: storageId
+      config: {
+        storage: storage,
+        storageId: storageId
+      }
     })
   })
 
@@ -166,25 +168,21 @@ describe('Request Manager', ()=>{
 
     it('should throw if required params are not provided', async ()=>{
       expect(()=>{new RequestManager({
-        apiURI: null,
-        storage: storage,
-        storageId: storageId
-      })}).toThrow('Invalid config: apiURI missing or invalid')
-    })
-
-    it('should throw if required params are not provided', async ()=>{
-      expect(()=>{new RequestManager({
         apiURI: API_URL,
-        storage: null,
-        storageId: storageId
+        config: {
+          storage: null,
+          storageId: storageId
+        }
       })}).toThrow('Invalid config: storage missing or invalid')
     })
     
     it('should throw if required params are not provided', async ()=>{
       expect(()=>{new RequestManager({
         apiURI: API_URL,
-        storage: storage,
-        storageId: null
+        config: {
+          storage: storage,
+          storageId: null
+        }
       })}).toThrow('Invalid config: storageId missing or invalid')
     })
   })

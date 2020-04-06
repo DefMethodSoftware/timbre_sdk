@@ -8,7 +8,7 @@ const API_URL = process.env.API_URL
 
 axios.defaults.adapter = httpAdapter;
 
-describe('Bands Client', ()=>{
+describe('MembershipRequests Client', ()=>{
   let storage, client, storageId, scope;
   beforeEach(()=>{
     storage = {
@@ -19,23 +19,28 @@ describe('Bands Client', ()=>{
     }
 
     scope = nock(API_URL, { allowUnmocked: false })
+    storageId = 'storageId'
 
     client = new MembershipRequestsClient({
       apiURI: API_URL,
-      storage: storage,
-      storageId: 'storageId'
+      config: {
+        storage: storage,
+        storageId: storageId
+      }
     })
   })
 
   it('should inherit from Crud Client', ()=>{
     const client = new MembershipRequestsClient({
       apiURI: API_URL,
-      storage: {
-        getItem: jest.fn().mockImplementation(()=>{
-          return 'token'
-        })
-      },
-      storageId: 'storageId'
+      config: {
+        storage: {
+          getItem: jest.fn().mockImplementation(()=>{
+            return 'token'
+          })
+        },
+        storageId: 'storageId'
+      }
     })
     expect(client).toBeInstanceOf(CrudClient)
   })
@@ -85,19 +90,22 @@ describe('Bands Client', ()=>{
   describe('#respond', ()=>{
     it('sends the Membership Request Response', async ()=>{
       const body = {
-        accepted: true
+        accepted: true,
+        bandId: 'abcd1234', 
+        membershipRequestId: 'abcd1234' 
       }
 
       scope.patch('/bands/abcd1234/membership_requests/abcd1234')
         .reply((uri, requestBody)=>{
-          expect(JSON.stringify(requestBody)).toBe(JSON.stringify(body))
+          expect(requestBody.accepted).toBe(true)
+
           return [
             204
           ]
         })
 
-      await client.respond({ bandId: 'abcd1234', membershipRequestId: 'abcd1234' , body: body })
-      
+      const resp = await client.respond(body)
+
       expect(scope.isDone()).toBe(true)
     })
   })

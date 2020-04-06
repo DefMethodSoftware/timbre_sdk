@@ -28,10 +28,11 @@ export default class RequestManager extends ErrorHandler {
 
     // root URL
     this.apiURI = apiURI
+    this.config = config
     // platform object for getting / setting stored keys
-    this.storage = config.storage
+    this.storage = this.config.storage
     // the object key used to access the stored token
-    this.storageId = config.storageId
+    this.storageId = this.config.storageId
   }
 
   _verifyConfig = (config, keys) => {
@@ -42,22 +43,22 @@ export default class RequestManager extends ErrorHandler {
     });
   }
 
-  generateRequestConfig = async ({apiURI, url, method, responseType, body, headers, token, ...config}) => {
-      const meth = method.toLowerCase();
-      return {
-        url: `${apiURI}/${url}`,
-        method: meth,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': await this.getToken(url, meth, token),
-          ...headers
-        },
-        withCredentials: false,
-        crossDomain: true,
-        timeout: 1000,
-        responseType: isEmpty(responseType) ? 'json' : responseType,
-        data: method !== 'get' && notEmpty(body) ? JSON.stringify(body) : {}
-      }
+  generateRequestConfig = async ({ apiURI, url, method, responseType, body, headers, token, timeout }) => {
+    const meth = method.toLowerCase();
+    return {
+      url: `${apiURI}/${url}`,
+      method: meth,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': await this.getToken(url, meth, token),
+        ...headers
+      },
+      withCredentials: false,
+      crossDomain: true,
+      timeout: isEmpty(timeout)? 5000 : timeout,
+      responseType: isEmpty(responseType) ? 'json' : responseType,
+      data: method !== 'get' && notEmpty(body) ? JSON.stringify(body) : {}
+    }
   };
 
   getToken = async (url, method, token) => {
@@ -94,7 +95,7 @@ export default class RequestManager extends ErrorHandler {
 
   requestor = async (config, retries = 1) => { 
     this._verifyConfig(config, REQUIRED_REQUEST_KEYS)
-    const requestConf = await this.generateRequestConfig({ ...config, apiURI: this.apiURI })
+    const requestConf = await this.generateRequestConfig({ apiURI: this.apiURI, ...config })
     const response = await this.performRequest(requestConf)
 
     return response

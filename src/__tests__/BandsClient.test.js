@@ -17,25 +17,29 @@ describe('Bands Client', ()=>{
         }),
         setItem: jest.fn()
     }
-
+    storageId = 'storageId'
     scope = nock(API_URL, { allowUnmocked: false })
 
     client = new BandsClient({
       apiURI: API_URL,
-      storage: storage,
-      storageId: 'storageId'
+      config: {
+        storage: storage,
+        storageId: storageId
+      }
     })
   })
 
   it('should inherit from Crud Client', ()=>{
     const client = new BandsClient({
       apiURI: API_URL,
-      storage: {
-        getItem: jest.fn().mockImplementation(()=>{
-          return 'token'
-        })
-      },
-      storageId: 'storageId'
+      config: {
+        storage: {
+          getItem: jest.fn().mockImplementation(()=>{
+            return 'token'
+          })
+        },
+        storageId: 'storageId'
+      }
     })
     expect(client).toBeInstanceOf(CrudClient)
   })
@@ -57,7 +61,7 @@ describe('Bands Client', ()=>{
           ]
         })
 
-      await client.create({body: body})
+      await client.create(body)
       
       expect(scope.isDone()).toBe(true)
     })

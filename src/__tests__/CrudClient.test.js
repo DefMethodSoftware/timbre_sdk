@@ -23,8 +23,10 @@ describe('Crud Client', ()=>{
       storageId = 'storageId'
       client = new CrudClient({
         apiURI: API_URL,
-        storage: storage,
-        storageId: storageId
+        config: {
+          storage: storage,
+          storageId: storageId
+        }
       })
     })
     it('inherits from RequestManager', async ()=>{

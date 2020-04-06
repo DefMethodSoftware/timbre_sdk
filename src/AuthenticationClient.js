@@ -5,7 +5,7 @@ export default class AuthenticationClient extends CrudClient {
     super(config)
   }
 
-  authenticate = async ({ email, password }) => {
-    return await this.post({ body: { email, password }, url: "users/login" })
+  authenticate = async ({ email, password, headers, token, responseType, timeout }) => {
+    return await this.post({ url: "users/login", body: { email, password }, headers, token, responseType, timeout })
   }
 }

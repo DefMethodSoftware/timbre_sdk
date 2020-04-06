@@ -17,26 +17,20 @@ describe('Users Client', ()=>{
         }),
         setItem: jest.fn()
     }
+    storageId = 'storageId'
 
     scope = nock(API_URL, { allowUnmocked: false })
-
+    
     client = new UsersClient({
-      apiURI: API_URL,
-      storage: storage,
-      storageId: 'storageId'
+      apiURI:  API_URL,
+      config: {
+        storage: storage,
+        storageId: storageId
+      }
     })
   })
 
   it('should inherit from Crud Client', ()=>{
-    const client = new UsersClient({
-      apiURI: API_URL,
-      storage: {
-        getItem: jest.fn().mockImplementation(()=>{
-          return 'token'
-        })
-      },
-      storageId: 'storageId'
-    })
     expect(client).toBeInstanceOf(CrudClient)
   })
 
@@ -111,18 +105,23 @@ describe('Users Client', ()=>{
           location: {
               coords: [55.509865,-0.118092],
               friendlyLocation: "London, UK"
-          }
+          },
+          userId: 'abcd1234'
       }
 
       scope.patch('/users/abcd1234')
         .reply((uri, requestBody)=>{
-          expect(JSON.stringify(requestBody)).toBe(JSON.stringify(body))
+          expect(requestBody.firstName).toBe(body.firstName)
+          expect(requestBody.lastName).toBe(body.lastName)
+          expect(requestBody.bio).toBe(body.bio)
+          expect(requestBody).toHaveProperty('instruments')
+          expect(requestBody).toHaveProperty('location')
           return [
             204
           ]
         })
 
-      await client.updateProfile({ userId: 'abcd1234' , body: body })
+      await client.updateProfile(body)
       
       expect(scope.isDone()).toBe(true)
     })

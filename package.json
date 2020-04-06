@@ -24,7 +24,7 @@
     "webpack": "^4.42.1"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest ./src/__tests__; jest ./src/integration",
     "build": "webpack"
   }
 }

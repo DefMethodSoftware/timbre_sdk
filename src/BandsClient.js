@@ -5,11 +5,11 @@ export default class BandsClient extends CrudClient {
     super(config)
   }
 
-  create = async ({body, token}) => {
-    return await this.post({ body: body, url: "bands", token: token })
+  create = async ({bandName, missingInstruments, bio, headers, token, responseType, timeout }) => {
+    return await this.post({ url: "bands", body: { bandName, missingInstruments, bio }, headers, token, responseType, timeout })
   }
 
-  view = async ({token}) => {
-    return await this.get({ url: "bands", token: token })
+  view = async ({ headers, token, responseType, timeout } = {}) => {
+    return await this.get({ url: "bands", headers, token, responseType, timeout })
   }
 }

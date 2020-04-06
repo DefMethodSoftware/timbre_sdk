@@ -5,11 +5,22 @@ export default class UsersClient extends CrudClient {
     super(config)
   }
 
-  create = async ({ email, password, username }) => {
-    return await this.post({ body: { email, password, username }, url: "users" })
+  create = async ({ email, password, username, headers, token, responseType, timeout }) => {
+    return await this.post({ url: "users", body: { email, password, username }, headers, token, responseType, timeout })
   }
-
-  updateProfile = async ({ userId, token, body: body}) => {
-    return await this.patch({ body: body, url: `users/${userId}`, token: token })
+  
+  updateProfile = async ({ 
+    userId,
+    firstName,
+    lastName,
+    bio,
+    instruments,
+    location,
+    headers,
+    token,
+    responseType,
+    timeout
+  }) => {
+    return await this.patch({  url: `users/${userId}`, body: { firstName, lastName, bio, instruments, location }, headers, token, responseType, timeout })
   }
 }

@@ -5,15 +5,15 @@ export default class MembershipRequestsClient extends CrudClient {
     super(config)
   }
 
-  create = async ({ bandId, token }) => {
-    return await this.post({ url: `bands/${bandId}/membership_requests`, token: token })
+  create = async ({ bandId, headers, token, responseType, timeout  } = {}) => {
+    return await this.post({ url: `bands/${bandId}/membership_requests`, headers, token, responseType, timeout })
   }
 
-  view = async ({ token }) => {
-    return await this.get({ url: "membership_requests", token: token })
+  view = async ({ headers, token, responseType, timeout } = {}) => {
+    return await this.get({ url: "membership_requests", headers, token, responseType, timeout  })
   }
 
-  respond = async ({ bandId, membershipRequestId, token, body: body}) => {
-    return await this.patch({ body: body, url: `bands/${bandId}/membership_requests/${membershipRequestId}`, token: token })
+  respond = async ({ bandId, membershipRequestId, accepted, declined, headers, token, responseType, timeout }) => {
+    return await this.patch({ url: `bands/${bandId}/membership_requests/${membershipRequestId}`, body: { accepted, declined }, headers, token, responseType, timeout })
   }
 }

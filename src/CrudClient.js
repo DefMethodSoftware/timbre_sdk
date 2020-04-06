@@ -5,24 +5,15 @@ export default class CrudClient extends RequestManager {
     super(config)
   }
 
-  get = async ({ url, token, ...reqConfig }) => {
-    return await this.requestor({
-      url: url, token: token, method: 'GET',
-      headers: reqConfig.headers, responseType: reqConfig.responseType
-    });
+  get = async (config) => {
+    return await this.requestor({ method: 'GET', ...config });
   }
 
-  post = async ({ url, body, token, ...reqConfig }) => {
-    return await this.requestor({
-      url: url, token: token, method: 'POST',
-      body: body, headers: reqConfig.headers, responseType: reqConfig.responseType
-    });
+  post = async (config) => {
+    return await this.requestor({ method: 'POST', ...config });
   };
 
-  patch = async ({ url, body, token, ...reqConfig }) => {
-    return await this.requestor({
-      url: url, token: token, method: 'PATCH',
-      body: body, headers: reqConfig.headers, responseType: reqConfig.responseType
-    });
+  patch = async (config) => {
+    return await this.requestor({ method: 'PATCH', ...config });
   };
 }

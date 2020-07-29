@@ -4,17 +4,19 @@ const UsersClient = require('./UsersClient').default
 const MembershipRequestsClient = require('./MembershipRequestsClient').default
 const {isEmpty} = require('./utils')
 
-export default function(url, config) {
-  if (isEmpty(url)) {
+export default function(url, version, config) {
+  if (isEmpty(url) || isEmpty(version)) {
     throw new Error(
-      'timbre-javascript-sdk: A valid url is required to successfully make network requests'
+      'timbre-javascript-sdk: A valid url and version are required to successfully make network requests'
     );
   }
-  
+
+  const apiURI = [url, version].join('/');
+
   return {
-    AuthenticationClient: new AuthenticationClient({ apiURI: url, config}),
-    BandsClient: new BandsClient({ apiURI: url, config}),
-    UsersClient: new UsersClient({ apiURI: url, config}),
-    MembershipRequestsClient: new MembershipRequestsClient({ apiURI: url, config})
+    AuthenticationClient: new AuthenticationClient({ apiURI: apiURI, config}),
+    BandsClient: new BandsClient({ apiURI: apiURI, config}),
+    UsersClient: new UsersClient({ apiURI: apiURI, config}),
+    MembershipRequestsClient: new MembershipRequestsClient({ apiURI: apiURI, config})
   };
 }
